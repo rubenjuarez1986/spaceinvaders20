@@ -33,6 +33,24 @@ public class Nave {
             posX++;
         }      
     }
+
+    public boolean isPulsadoIzquierda() {
+        return pulsadoIzquierda;
+    }
+
+    public void setPulsadoIzquierda(boolean pulsadoIzquierda) {
+        this.pulsadoIzquierda = pulsadoIzquierda;
+        this.pulsadoDerecha = false;
+    }
+
+    public boolean isPulsadoDerecha() {
+        return pulsadoDerecha;
+    }
+
+    public void setPulsadoDerecha(boolean pulsadoDerecha) {
+        this.pulsadoDerecha = pulsadoDerecha;
+        this.pulsadoIzquierda = false;
+    }
     
     
     
