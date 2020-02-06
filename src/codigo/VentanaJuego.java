@@ -38,6 +38,8 @@ public class VentanaJuego extends javax.swing.JFrame {
     
     Marciano marciano=new Marciano(ANCHOPANTALLA);//inicializo el marciano
     Nave miNave = new Nave();
+    Disparo miDisparo = new Disparo();
+    
     
     /**
      * Creates new form VentanaJuego
@@ -77,8 +79,9 @@ public class VentanaJuego extends javax.swing.JFrame {
         }
         //dibujo la nave
         g2.drawImage(miNave.imagen, miNave.posX, miNave.posY, null);
+        g2.drawImage(miDisparo.imagen, miDisparo.posX, miDisparo.posY, null);
         miNave.mueve();
-        
+        miDisparo.mueve();
         ///////////////////////////////////////////////////
         g2=(Graphics2D) jPanel1.getGraphics();//dibujo de golpe el buffer sobre el jPanel
         g2.drawImage(buffer, 0, 0, null);
@@ -99,6 +102,9 @@ public class VentanaJuego extends javax.swing.JFrame {
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                formKeyReleased(evt);
             }
         });
 
@@ -131,9 +137,19 @@ public class VentanaJuego extends javax.swing.JFrame {
         switch(evt.getKeyCode()){
             case KeyEvent.VK_LEFT : miNave.setPulsadoIzquierda(true); break;
             case KeyEvent.VK_RIGHT : miNave.setPulsadoDerecha(true); break;
-            
+            case KeyEvent.VK_SPACE : miDisparo.posX = miNave.posX;
+                                     miDisparo.posY = miNave.posY;
+                                     break;
         }
     }//GEN-LAST:event_formKeyPressed
+
+    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
+        switch(evt.getKeyCode()){
+            case KeyEvent.VK_LEFT : miNave.setPulsadoIzquierda(false); break;
+            case KeyEvent.VK_RIGHT : miNave.setPulsadoDerecha(false); break;
+            
+        }
+    }//GEN-LAST:event_formKeyReleased
 
     /**
      * @param args the command line arguments
