@@ -67,10 +67,10 @@ public class VentanaJuego extends javax.swing.JFrame {
         } catch (IOException ex) {
         }
         //cargo las 30 imágenes del spritesheet en el array de bufferedimages
-        for (int i=0; i< 6; i++){
-            for (int j=0; j<5; j++){
-                imagenes[i*5 + j] = plantilla
-                        .getSubimage(j*32, i*32, 64, 64)
+        for (int i=0; i< 5; i++){
+            for (int j=0; j<4; j++){
+                imagenes[i*4 + j] = plantilla
+                        .getSubimage(j*64, i*64, 64, 64)
                         .getScaledInstance(32, 32, Image.SCALE_SMOOTH);
                 
             }
@@ -88,7 +88,7 @@ public class VentanaJuego extends javax.swing.JFrame {
             for (int j = 0; j < columnasMarcianos; j++) {
                 listaMarcianos[i][j] = new Marciano(ANCHOPANTALLA);
                 listaMarcianos[i][j].imagen1 = imagenes[4];
-                listaMarcianos[i][j].imagen2 = imagenes[9];
+                listaMarcianos[i][j].imagen2 = imagenes[5];
                 listaMarcianos[i][j].posX = j * (15 + listaMarcianos[i][j].imagen1.getWidth(null));
                 listaMarcianos[i][j].posY = i * (10 + listaMarcianos[i][j].imagen1.getHeight(null));
             }
