@@ -12,6 +12,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 /**
@@ -28,6 +32,10 @@ public class VentanaJuego extends javax.swing.JFrame {
     int contador = 0;
 
     BufferedImage buffer = null;
+    //buffer para guardar las imágenes de todos los marcianos
+    BufferedImage plantilla = null;
+    BufferedImage[] imagenes = new BufferedImage[30];
+    
 
     Timer temporizador = new Timer(10, new ActionListener() {//bucle de animacion del juego. refresca el contenido de la pantalla
         @Override
@@ -53,6 +61,16 @@ public class VentanaJuego extends javax.swing.JFrame {
 
         initComponents();
 
+        try {
+            plantilla = ImageIO.read(getClass().getResource("/imagenes/invaders2.png"));
+        } catch (IOException ex) {
+        }
+        //cargo las 30 imágenes del spritesheet en el array de bufferedimages
+        for (int i=0; i< 6; i++){
+            for (int j=0; j<5; j++){
+                imagenes[i*5 + j] = plantilla.getSubimage(j*32, i*32, 32, 32);
+            }
+        }
         setSize(ANCHOPANTALLA, ALTOPANTALLA);
         jPanel1.setSize(ANCHOPANTALLA, ALTOPANTALLA);
         buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA, ALTOPANTALLA);//inicializo el buffer
@@ -65,6 +83,8 @@ public class VentanaJuego extends javax.swing.JFrame {
         for (int i = 0; i < filasMarcianos; i++) {
             for (int j = 0; j < columnasMarcianos; j++) {
                 listaMarcianos[i][j] = new Marciano(ANCHOPANTALLA);
+                listaMarcianos[i][j].imagen1 = imagenes[2];
+                listaMarcianos[i][j].imagen2 = imagenes[3];
                 listaMarcianos[i][j].posX = j * (15 + listaMarcianos[i][j].imagen1.getWidth(null));
                 listaMarcianos[i][j].posY = i * (10 + listaMarcianos[i][j].imagen1.getHeight(null));
             }
