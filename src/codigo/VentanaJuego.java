@@ -69,7 +69,7 @@ public class VentanaJuego extends javax.swing.JFrame {
                 listaMarcianos[i][j].posY = i * (10 + listaMarcianos[i][j].imagen1.getHeight(null));
             }
         }
-
+        miDisparo.posY = -2000;
     }
 
     private void pintaMarcianos(Graphics2D _g2) {
@@ -110,6 +110,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         g2.drawImage(miDisparo.imagen, miDisparo.posX, miDisparo.posY, null);
         miNave.mueve();
         miDisparo.mueve();
+        chequeaColision();
         ///////////////////////////////////////////////////
         g2 = (Graphics2D) jPanel1.getGraphics();//dibujo de golpe el buffer sobre el jPanel
         g2.drawImage(buffer, 0, 0, null);
@@ -134,6 +135,12 @@ public class VentanaJuego extends javax.swing.JFrame {
                                             listaMarcianos[i][j].imagen1.getWidth(null),
                                             listaMarcianos[i][j].imagen1.getHeight(null)
                 );
+                if (rectanguloDisparo.intersects(rectanguloMarciano)){
+                    //si entra aquí es porque han chocado un marciano y el disparo
+                    listaMarcianos[i][j].posY = 2000;
+                    miDisparo.posY = -2000;
+                    
+                }
             }
         }
         
