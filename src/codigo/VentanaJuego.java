@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.Timer;
 
@@ -114,6 +115,31 @@ public class VentanaJuego extends javax.swing.JFrame {
         g2.drawImage(buffer, 0, 0, null);
     }
 
+    //chequea si un disparo y un marciano colisionan
+    private void chequeaColision(){
+        Rectangle2D.Double rectanguloMarciano = new Rectangle2D.Double();
+        Rectangle2D.Double rectanguloDisparo = new Rectangle2D.Double();
+        
+        //calculo el rectangulo que contiene al disparo
+        rectanguloDisparo.setFrame(miDisparo.posX,
+                                    miDisparo.posY, 
+                                    miDisparo.imagen.getWidth(null),
+                                    miDisparo.imagen.getHeight(null));
+        
+        for(int i=0; i<filasMarcianos; i++){
+            for (int j=0; j<columnasMarcianos; j++){
+                //calculo el rectángulo corresponmdiente al marciano que estoy comprobando
+                rectanguloMarciano.setFrame(listaMarcianos[i][j].posX,
+                                            listaMarcianos[i][j].posY,
+                                            listaMarcianos[i][j].imagen1.getWidth(null),
+                                            listaMarcianos[i][j].imagen1.getHeight(null)
+                );
+            }
+        }
+        
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
