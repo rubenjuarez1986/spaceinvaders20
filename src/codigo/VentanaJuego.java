@@ -19,8 +19,8 @@ import javax.swing.Timer;
  */
 public class VentanaJuego extends javax.swing.JFrame {
 
-    static int ANCHOPANTALLA = 800;
-    static int ALTOPANTALLA = 600;
+    static int ANCHOPANTALLA = 600;
+    static int ALTOPANTALLA = 500;
 
     int filasMarcianos = 5;
     int columnasMarcianos = 10;
@@ -43,7 +43,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     //el array de dos dimensiones que guarda la lista de marcianos
     Marciano[][] listaMarcianos = new Marciano[filasMarcianos][columnasMarcianos];
     //dirección en la que se mueve el grupo de marcianos
-    boolean direccionMarcianos = false;
+    boolean direccionMarcianos = true;
 
     /**
      * Creates new form VentanaJuego
@@ -81,6 +81,15 @@ public class VentanaJuego extends javax.swing.JFrame {
                     _g2.drawImage(listaMarcianos[i][j].imagen2, listaMarcianos[i][j].posX, listaMarcianos[i][j].posY, null);
                 } else {
                     contador = 0;
+                }
+                
+                if (listaMarcianos[i][j].posX == ANCHOPANTALLA - listaMarcianos[i][j].imagen1.getWidth(null) || listaMarcianos[i][j].posX == 0) {
+                    direccionMarcianos = !direccionMarcianos;
+                    for (int k = 0; k < filasMarcianos; k++) {
+                        for (int m = 0; m < columnasMarcianos; m++) {
+                            listaMarcianos[k][m].posY += listaMarcianos[k][m].imagen1.getHeight(null);
+                        }
+                    }
                 }
             }
         }
