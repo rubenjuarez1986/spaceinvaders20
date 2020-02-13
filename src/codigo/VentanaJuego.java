@@ -55,6 +55,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     //el array de dos dimensiones que guarda la lista de marcianos
     Marciano[][] listaMarcianos = new Marciano[filasMarcianos][columnasMarcianos];
     Image fondo;
+    Image naveFoto;
     //dirección en la que se mueve el grupo de marcianos
     boolean direccionMarcianos = true;
 
@@ -82,10 +83,11 @@ public class VentanaJuego extends javax.swing.JFrame {
 
             }
         }
+        imagenes[19] = miNave.imagenNave.getScaledInstance(150, 80, 100);
         imagenes[20] = plantilla.getSubimage(0, 320, 66, 32); //sprite de la nave
         imagenes[21] = plantilla.getSubimage(66, 320, 64, 32);
-        imagenes[22] = plantilla.getSubimage(130, 320, 64, 32); //explosion parteB
-        imagenes[23] = plantilla.getSubimage(194, 320, 64, 32);//explosion parteA
+        imagenes[23] = plantilla.getSubimage(255, 320, 32, 32);//explosion parteB
+        imagenes[22] = plantilla.getSubimage(255, 289, 32, 32);//explosion parteA
 
         setSize(ANCHOPANTALLA, ALTOPANTALLA);
         jPanel1.setSize(ANCHOPANTALLA, ALTOPANTALLA);
@@ -93,9 +95,11 @@ public class VentanaJuego extends javax.swing.JFrame {
         buffer.createGraphics();
 
         temporizador.start();//arranco el temporizador
-        miNave.imagen = imagenes[21];
-        miNave.posX = ANCHOPANTALLA / 2 - miNave.imagen.getWidth(this) / 2;
-        miNave.posY = ALTOPANTALLA - 100;
+        
+                       
+        miNave.imagenNave = imagenes[19];
+        miNave.posX = ANCHOPANTALLA / 2 - miNave.imagenNave.getWidth(this) / 2;
+        miNave.posY = ALTOPANTALLA - 150;
         //creamos el array de marcianos
         for (int i = 0; i < filasMarcianos; i++) {
             for (int j = 0; j < columnasMarcianos; j++) {
@@ -142,32 +146,32 @@ public class VentanaJuego extends javax.swing.JFrame {
             disparoAux.mueve();
             if (disparoAux.posY < 0) {
                 listaDisparos.remove(i);                     
-            }
+            }else{
             g2.drawImage(disparoAux.imagen, disparoAux.posX, disparoAux.posY, null);
         }
-
+        }
     }
     private void pintaExplosiones(Graphics2D g2) {
         //pinta todas las explosiones
         Explosion explosionAux;
-        for (int i = 0; i < listaExplosion.size(); i++) {
+        for (int i=0; i< listaExplosion.size(); i++){
             explosionAux = listaExplosion.get(i);
-       explosionAux.tiempoDeVida --;
-       if(explosionAux.tiempoDeVida<25){
-           g2.drawImage(explosionAux.imagen1, explosionAux.posX, explosionAux.posX,null);
-           
-       }else{
-            g2.drawImage(explosionAux.imagen2, explosionAux.posX, explosionAux.posX,null);
-       }
-       //si el tiempo de vida es menor o igual a cero la elimini
-        if (explosionAux.tiempoDeVida <=0){
-        listaExplosion.remove(i);
+            explosionAux.tiempoDeVida --;
+            if (explosionAux.tiempoDeVida > 25 ){
+                g2.drawImage(explosionAux.imagen1, 
+                            explosionAux.posX, 
+                            explosionAux.posY, null);
+            }
+            else{
+                g2.drawImage(explosionAux.imagen2, 
+                            explosionAux.posX, 
+                            explosionAux.posY, null);
+            } 
+            //si el tiempo de vida de la explosión es menor o igual a 0 la elimino
+            if (explosionAux.tiempoDeVida <=0){
+                listaExplosion.remove(i);
+            }
         }
-        
-        }
-          
-        
-
     }
 
     private void bucleJuego() {//redibuja los objetos en el jPanel1
@@ -181,7 +185,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         contador++;
         pintaMarcianos(g2);
         //dibujo la nave
-        g2.drawImage(miNave.imagen, miNave.posX, miNave.posY, null);
+        g2.drawImage(miNave.imagenNave, miNave.posX, miNave.posY, null);
         pintaDisparo(g2);
         pintaExplosiones(g2);
         miNave.mueve();
@@ -190,7 +194,6 @@ public class VentanaJuego extends javax.swing.JFrame {
         g2 = (Graphics2D) jPanel1.getGraphics();//dibujo de golpe el buffer sobre el jPanel
         g2.drawImage(buffer, 0, 0, null);
         
-      
 
     }
 
@@ -200,9 +203,9 @@ public class VentanaJuego extends javax.swing.JFrame {
         Rectangle2D.Double rectanguloDisparo = new Rectangle2D.Double();
         
         for (int k = 0; k < listaDisparos.size(); k++) {
-            //calculo el rectangulo que contiene al disparo
+            //calculo el rectangulo que contiene al disparo correspondiente
             rectanguloDisparo.setFrame(listaDisparos.get(k).posX,
-                   listaDisparos.get(k).posY,
+                    listaDisparos.get(k).posY,
                     listaDisparos.get(k).imagen.getWidth(null),
                     listaDisparos.get(k).imagen.getHeight(null));
 
@@ -216,21 +219,20 @@ public class VentanaJuego extends javax.swing.JFrame {
                     );
                     if (rectanguloDisparo.intersects(rectanguloMarciano)) {
                         //si entra aquí es porque han chocado un marciano y el disparo
-                        Explosion e= new Explosion();
-                        
+                        Explosion e = new Explosion();
                         e.posX = listaMarcianos[i][j].posX;
                         e.posY = listaMarcianos[i][j].posY;
                         e.imagen1 = imagenes[23];
-                        e.imagen1 = imagenes[22];
+                        e.imagen2 = imagenes[22];
                         listaExplosion.add(e);
-                        
-                        listaMarcianos[i][k].posY = 2000;
+                        e.sonidoExplosion.start();
+                        listaMarcianos[i][j].posY = 2000;
                         listaDisparos.remove(k);
-    
+               
                     }
                 }
             }
-        }
+        }   
     }
 
     /**
@@ -258,11 +260,11 @@ public class VentanaJuego extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1013, Short.MAX_VALUE)
+            .addGap(0, 1029, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 710, Short.MAX_VALUE)
+            .addGap(0, 778, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

@@ -29,9 +29,9 @@ public class Disparo {
 
     public void posicionaDisparo( Nave _nave){
         posX = _nave.posX 
-                +_nave.imagen.getWidth(null)/2 
+                +_nave.imagenNave.getWidth(null)/2 
                 - imagen.getWidth(null)/2;
-        posY = _nave.posY - _nave.imagen.getHeight(null)/2;
+        posY = _nave.posY - _nave.imagenNave.getHeight(null)/2;
         
     }
     

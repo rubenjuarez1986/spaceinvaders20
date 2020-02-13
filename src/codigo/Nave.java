@@ -2,6 +2,9 @@
 package codigo;
 
 import java.awt.Image;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -9,7 +12,7 @@ import javax.imageio.ImageIO;
  * @author Jorge Cisneros
  */
 public class Nave {
-    Image imagen = null;
+    Image imagenNave = null;
     public int posX = 0;
     public int posY = 0;
     
@@ -18,6 +21,11 @@ public class Nave {
     
     
     public Nave(){
+        try {
+            imagenNave = ImageIO.read(getClass().getResource("/imagenes/nave.png"));
+        } catch (IOException ex) {
+          
+        }
 
     }
     
@@ -26,7 +34,7 @@ public class Nave {
             posX -= 3;
         }
         if (pulsadoDerecha && posX 
-                < VentanaJuego.ANCHOPANTALLA - imagen.getWidth(null)){
+                < VentanaJuego.ANCHOPANTALLA - imagenNave.getWidth(null)){
             posX += 3 ;
         }      
     }
