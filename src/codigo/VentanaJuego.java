@@ -5,18 +5,23 @@
  */
 package codigo;
 
+
 import java.awt.Color;
+import static java.awt.Color.green;
+import static java.awt.Color.white;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
@@ -25,15 +30,28 @@ import javax.swing.Timer;
  * @author Rocio Soriano
  */
 public class VentanaJuego extends javax.swing.JFrame {
+        
+    //para los mensajes
+   public static Label label2 = new Label(); 
 
-    static int ANCHOPANTALLA = 728;
-    static int ALTOPANTALLA = 455;
+    //para la puntuacion
+   public static Label label1 = new Label(); 
+   int puntuacion = 0;
 
-    int filasMarcianos = 5;
+
+      boolean gameOver = false;
+    
+
+    static int ANCHOPANTALLA = 1000;
+    static int ALTOPANTALLA = 536;
+
+    int filasMarcianos = 6;
     int columnasMarcianos = 10;
     int contador = 0;
 
     BufferedImage buffer = null;
+ 
+    
     //buffer para guardar las imágenes de todos los marcianos
     BufferedImage plantilla = null;
     Image[] imagenes = new Image[30];
@@ -69,7 +87,25 @@ public class VentanaJuego extends javax.swing.JFrame {
             fondo = ImageIO.read(getClass().getResource("/imagenes/fondo.jpg"));
         } catch (IOException ex) {
         }
-
+ setLocationRelativeTo(null);
+        Font font1;
+        Font font2 = null;
+        font1 = new Font("Courier New", Font.BOLD, 30);
+        font2 = new Font("Calibri", Font.BOLD, 30);
+        //titulo
+        label2.setText("Muerte a los humanos!!!"); 
+        label2.setFont(font2);
+        label2.setForeground(white);
+        label2.setBackground(green);
+        label2.setBounds(300, 0, 600, 30);
+        //puntuacion
+        label1.setFont(font1);
+        label1.setForeground(white);
+        label1.setBackground(green);
+        label1.setBounds(700, 0, 100, 30);
+        label1.setText("     0");
+        jPanel1.add(label1);
+        jPanel1.add(label2);
         try {
             plantilla = ImageIO.read(getClass().getResource("/imagenes/invaders2.png"));
         } catch (IOException ex) {
@@ -177,10 +213,10 @@ public class VentanaJuego extends javax.swing.JFrame {
     private void bucleJuego() {//redibuja los objetos en el jPanel1
 
         Graphics2D g2 = (Graphics2D) buffer.getGraphics();//borro todo lo que ahi en el buffer
-
-        g2.setColor(Color.BLACK);//doy el color negro a la pantalla
-        g2.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
-        g2.drawImage(fondo, 0, 0, null);
+        if (!gameOver) {
+            g2.setColor(Color.BLACK);//doy el color negro a la pantalla
+            g2.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
+            g2.drawImage(fondo, 0, 0, null);
         ///////////////////////////////////////////////////
         contador++;
         pintaMarcianos(g2);
@@ -235,6 +271,12 @@ public class VentanaJuego extends javax.swing.JFrame {
         }   
     }
 
+
+    
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -245,6 +287,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(900, 633));
@@ -261,20 +304,22 @@ public class VentanaJuego extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 812, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 619, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 559, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 921, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,7 +394,15 @@ public class VentanaJuego extends javax.swing.JFrame {
         });
     }
 
+  
+   
+        
+        
+     
+     
+     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
