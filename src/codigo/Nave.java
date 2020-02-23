@@ -2,6 +2,7 @@
 package codigo;
 
 import java.awt.Image;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,7 +57,9 @@ public class Nave {
         this.pulsadoDerecha = pulsadoDerecha;
         this.pulsadoIzquierda = false;
     }
-    
+
+
+   
     
     
 }

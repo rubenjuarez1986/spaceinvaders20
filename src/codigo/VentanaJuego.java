@@ -18,11 +18,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.Timer;
 
 /**
@@ -211,27 +211,70 @@ public class VentanaJuego extends javax.swing.JFrame {
     }
 
     private void bucleJuego() {//redibuja los objetos en el jPanel1
-
+        contador++;
         Graphics2D g2 = (Graphics2D) buffer.getGraphics();//borro todo lo que ahi en el buffer
         if (!gameOver) {
             g2.setColor(Color.BLACK);//doy el color negro a la pantalla
             g2.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
             g2.drawImage(fondo, 0, 0, null);
+            
+            //disparo bonus
+             if(puntuacion == 600){
+            try {
+                miDisparo.imagen = ImageIO.read(getClass().getResource("/imagenes/nixon.png"));
+            } catch (IOException ex) {}
+        }
+        
         ///////////////////////////////////////////////////
-        contador++;
+        
         pintaMarcianos(g2);
         //dibujo la nave
         g2.drawImage(miNave.imagenNave, miNave.posX, miNave.posY, null);
         pintaDisparo(g2);
         pintaExplosiones(g2);
+         
         miNave.mueve();
         chequeaColision();
         ///////////////////////////////////////////////////
+        }  
+        else{
+            try{
+                gameOver(g2);
+            }
+            catch( IOException ex){
+                
+            }
+        }
         g2 = (Graphics2D) jPanel1.getGraphics();//dibujo de golpe el buffer sobre el jPanel
         g2.drawImage(buffer, 0, 0, null);
         
-
+        
+         
     }
+    private void gameOver(Graphics2D muerto) throws IOException{
+         try {
+               Image gameOver1 = ImageIO.read(getClass().getResource("/imagenes/gameOver.png"));
+               muerto.drawImage(gameOver1, 0, 0, ANCHOPANTALLA, ALTOPANTALLA ,null);
+           } catch (IOException ex) {}
+             
+              reproduce("/sonidos/fin.wav");
+    }
+      private void reproduce (String cancion){
+           try {
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream( getClass().getResource(cancion) ));
+            clip.loop(0);
+            Thread one = new Thread() {
+                    public void run() {
+                            while(clip.getFramePosition()<clip.getFrameLength())
+                                Thread.yield();
+                    }  
+                };
+            one.start();
+        } catch (Exception e) {      
+        } 
+   }
+    
 
     //chequea si un disparo y un marciano colisionan
     private void chequeaColision() {
@@ -264,11 +307,21 @@ public class VentanaJuego extends javax.swing.JFrame {
                         e.sonidoExplosion.start();
                         listaMarcianos[i][j].posY = 2000;
                         listaDisparos.remove(k);
+                         puntuacion = puntuacion + 50;
+                label1.setText("" + puntuacion);
                
+                    } 
+                    
+                   /** miNave.setFrame(miNave.posX,
+                                       miNave.posY, 
+                                       miNave.imagenNave.getWidth(null),
+                                      miNave.imagenNave.getHeight(null));
+           if(miNave.intersects(rectanguloMarciano)){
+               gameOver = true;
                     }
-                }
+                */}
             }
-        }   
+        }
     }
 
 
@@ -393,14 +446,6 @@ public class VentanaJuego extends javax.swing.JFrame {
             }
         });
     }
-
-  
-   
-        
-        
-     
-     
-     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
