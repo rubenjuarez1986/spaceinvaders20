@@ -30,17 +30,17 @@ import javax.swing.Timer;
  * @author Rocio Soriano
  */
 public class VentanaJuego extends javax.swing.JFrame {
-        
+
     //para los mensajes
-   public static Label label2 = new Label(); 
+    public static Label label2 = new Label();
 
     //para la puntuacion
-   public static Label label1 = new Label(); 
-   int puntuacion = 0;
+    public static Label label1 = new Label();
+    int puntuacion = 0;
 
-
-      boolean gameOver = false;
-    
+    boolean gameOver = false;
+    boolean UnSoloDisparo = false;
+    boolean FinDeJuego = false;
 
     static int ANCHOPANTALLA = 1000;
     static int ALTOPANTALLA = 536;
@@ -48,10 +48,10 @@ public class VentanaJuego extends javax.swing.JFrame {
     int filasMarcianos = 6;
     int columnasMarcianos = 10;
     int contador = 0;
-
+    //Reproduce el sonido una única vez.
+    boolean gilipollas = true;
     BufferedImage buffer = null;
- 
-    
+
     //buffer para guardar las imágenes de todos los marcianos
     BufferedImage plantilla = null;
     Image[] imagenes = new Image[30];
@@ -66,7 +66,7 @@ public class VentanaJuego extends javax.swing.JFrame {
 
     Marciano marciano = new Marciano(ANCHOPANTALLA);//inicializo el marciano
     Nave miNave = new Nave();
-    Disparo miDisparo = new Disparo();
+    Disparo miDisparo = new Disparo(puntuacion);
     ArrayList<Disparo> listaDisparos = new ArrayList();
     ArrayList<Explosion> listaExplosion = new ArrayList();
 
@@ -87,13 +87,13 @@ public class VentanaJuego extends javax.swing.JFrame {
             fondo = ImageIO.read(getClass().getResource("/imagenes/fondo.jpg"));
         } catch (IOException ex) {
         }
- setLocationRelativeTo(null);
+
         Font font1;
         Font font2 = null;
         font1 = new Font("Courier New", Font.BOLD, 30);
         font2 = new Font("Calibri", Font.BOLD, 30);
         //titulo
-        label2.setText("Muerte a los humanos!!!"); 
+        label2.setText("Muerte a los humanos!!!");
         label2.setFont(font2);
         label2.setForeground(white);
         label2.setBackground(green);
@@ -115,7 +115,7 @@ public class VentanaJuego extends javax.swing.JFrame {
             for (int j = 0; j < 4; j++) {
                 imagenes[i * 4 + j] = plantilla
                         .getSubimage(j * 64, i * 64, 64, 64)
-                        .getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+                        .getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 
             }
         }
@@ -131,8 +131,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         buffer.createGraphics();
 
         temporizador.start();//arranco el temporizador
-        
-                       
+
         miNave.imagenNave = imagenes[19];
         miNave.posX = ANCHOPANTALLA / 2 - miNave.imagenNave.getWidth(this) / 2;
         miNave.posY = ALTOPANTALLA - 150;
@@ -144,7 +143,7 @@ public class VentanaJuego extends javax.swing.JFrame {
                 listaMarcianos[i][j].imagen2 = imagenes[2 * i + 1];
                 listaMarcianos[i][j].posX = j * (15 + listaMarcianos[i][j].imagen1.getWidth(null));
                 listaMarcianos[i][j].posY = i * (10 + listaMarcianos[i][j].imagen1.getHeight(null));
-                
+
             }
         }
         miDisparo.posY = -2000;
@@ -181,107 +180,133 @@ public class VentanaJuego extends javax.swing.JFrame {
             disparoAux = listaDisparos.get(i);
             disparoAux.mueve();
             if (disparoAux.posY < 0) {
-                listaDisparos.remove(i);                     
-            }else{
-            g2.drawImage(disparoAux.imagen, disparoAux.posX, disparoAux.posY, null);
-        }
+                listaDisparos.remove(i);
+            } else {
+                g2.drawImage(disparoAux.imagen, disparoAux.posX, disparoAux.posY, null);
+
+            }
         }
     }
+
     private void pintaExplosiones(Graphics2D g2) {
         //pinta todas las explosiones
         Explosion explosionAux;
-        for (int i=0; i< listaExplosion.size(); i++){
+        for (int i = 0; i < listaExplosion.size(); i++) {
             explosionAux = listaExplosion.get(i);
-            explosionAux.tiempoDeVida --;
-            if (explosionAux.tiempoDeVida > 25 ){
-                g2.drawImage(explosionAux.imagen1, 
-                            explosionAux.posX, 
-                            explosionAux.posY, null);
+            explosionAux.tiempoDeVida--;
+            if (explosionAux.tiempoDeVida > 25) {
+                g2.drawImage(explosionAux.imagen1,
+                        explosionAux.posX,
+                        explosionAux.posY, null);
+            } else {
+                g2.drawImage(explosionAux.imagen2,
+                        explosionAux.posX,
+                        explosionAux.posY, null);
             }
-            else{
-                g2.drawImage(explosionAux.imagen2, 
-                            explosionAux.posX, 
-                            explosionAux.posY, null);
-            } 
             //si el tiempo de vida de la explosión es menor o igual a 0 la elimino
-            if (explosionAux.tiempoDeVida <=0){
+            if (explosionAux.tiempoDeVida <= 0) {
                 listaExplosion.remove(i);
             }
         }
     }
 
     private void bucleJuego() {//redibuja los objetos en el jPanel1
+
         contador++;
         Graphics2D g2 = (Graphics2D) buffer.getGraphics();//borro todo lo que ahi en el buffer
-        if (!gameOver) {
+
+        if (puntuacion >= 2900) {
+            FinDeJuego = true;
+        }
+        if (!gameOver && !FinDeJuego) {
             g2.setColor(Color.BLACK);//doy el color negro a la pantalla
             g2.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
             g2.drawImage(fondo, 0, 0, null);
-            
-            //disparo bonus
-             if(puntuacion == 600){
-            try {
-                miDisparo.imagen = ImageIO.read(getClass().getResource("/imagenes/nixon.png"));
-            } catch (IOException ex) {}
+            ///////////////////////////////////////////////////
+            pintaMarcianos(g2);
+            //dibujo la nave
+            g2.drawImage(miNave.imagenNave, miNave.posX, miNave.posY, null);
+            pintaDisparo(g2);
+            pintaExplosiones(g2);
+
+            miNave.mueve();
+            chequeaColision();
+            colisionNaveMarciano();
+            ///////////////////////////////////////////////////
+        } else if (gameOver && !FinDeJuego) {
+            gameOver(g2);
         }
-        
-        ///////////////////////////////////////////////////
-        
-        pintaMarcianos(g2);
-        //dibujo la nave
-        g2.drawImage(miNave.imagenNave, miNave.posX, miNave.posY, null);
-        pintaDisparo(g2);
-        pintaExplosiones(g2);
-         
-        miNave.mueve();
-        chequeaColision();
-        ///////////////////////////////////////////////////
-        }  
-        else{
-            try{
-                gameOver(g2);
-            }
-            catch( IOException ex){
-                
-            }
+        if (FinDeJuego) {
+            Fin(g2);
         }
         g2 = (Graphics2D) jPanel1.getGraphics();//dibujo de golpe el buffer sobre el jPanel
         g2.drawImage(buffer, 0, 0, null);
-        
-        
-         
     }
-    private void gameOver(Graphics2D muerto) throws IOException{
-         try {
-               Image gameOver1 = ImageIO.read(getClass().getResource("/imagenes/gameOver.png"));
-               muerto.drawImage(gameOver1, 0, 0, ANCHOPANTALLA, ALTOPANTALLA ,null);
-           } catch (IOException ex) {}
-             
-              reproduce("/sonidos/fin.wav");
+
+    private void Fin(Graphics2D g4) {
+        try {
+            fondo = ImageIO.read(getClass().getResource("/imagenes/winner.jpg"));
+            g4.setColor(Color.BLACK);//doy el color negro a la pantalla
+            g4.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
+            g4.drawImage(fondo, 0, 0, null);
+            /*buffer.getGraphics().drawImage(gameOver, 0, 0, ANCHOPANTALLA, ALTOPANTALLA, null);*/
+            if (gilipollas) {
+                reproduce("/sonidos/winner.wav");
+                gilipollas = false;
+            }
+
+        } catch (IOException ex) {
+        }
     }
-      private void reproduce (String cancion){
-           try {
+
+    private void gameOver(Graphics2D g3) {
+
+        for (int i = 0; i < filasMarcianos; i++) {
+            for (int j = 0; j < columnasMarcianos; j++) {
+                //listaMarcianos[i][j] = null;
+                listaMarcianos[i][j].posY = 2000;
+            }
+        }
+
+        try {
+            fondo = ImageIO.read(getClass().getResource("/imagenes/gameover.jpg"));
+            g3.setColor(Color.BLACK);//doy el color negro a la pantalla
+            g3.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
+            g3.drawImage(fondo, 0, 0, null);
+            /*buffer.getGraphics().drawImage(gameOver, 0, 0, ANCHOPANTALLA, ALTOPANTALLA, null);*/
+            if (gilipollas) {
+                reproduce("/sonidos/fin.wav");
+                gilipollas = false;
+            }
+
+        } catch (IOException ex) {
+        }
+    }
+
+    private void reproduce(String cancion) {
+        try {
             Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream( getClass().getResource(cancion) ));
+            clip.open(AudioSystem.getAudioInputStream(getClass().getResource(cancion)));
             clip.loop(0);
             Thread one = new Thread() {
-                    public void run() {
-                            while(clip.getFramePosition()<clip.getFrameLength())
-                                Thread.yield();
-                    }  
-                };
+                public void run() {
+                    while (clip.getFramePosition() < clip.getFrameLength()) {
+                        Thread.yield();
+                    }
+                }
+            };
             one.start();
-        } catch (Exception e) {      
-        } 
-   }
-    
+        } catch (Exception e) {
+        }
+    }
 
     //chequea si un disparo y un marciano colisionan
     private void chequeaColision() {
         Rectangle2D.Double rectanguloMarciano = new Rectangle2D.Double();
         Rectangle2D.Double rectanguloDisparo = new Rectangle2D.Double();
-        
+
         for (int k = 0; k < listaDisparos.size(); k++) {
+            UnSoloDisparo = true;
             //calculo el rectangulo que contiene al disparo correspondiente
             rectanguloDisparo.setFrame(listaDisparos.get(k).posX,
                     listaDisparos.get(k).posY,
@@ -294,10 +319,11 @@ public class VentanaJuego extends javax.swing.JFrame {
                     rectanguloMarciano.setFrame(listaMarcianos[i][j].posX,
                             listaMarcianos[i][j].posY,
                             listaMarcianos[i][j].imagen1.getWidth(null),
-                            listaMarcianos[i][j].imagen1.getHeight(null)
-                    );
-                    if (rectanguloDisparo.intersects(rectanguloMarciano)) {
+                            listaMarcianos[i][j].imagen1.getHeight(null));
+
+                    if (rectanguloDisparo.intersects(rectanguloMarciano) && UnSoloDisparo) {
                         //si entra aquí es porque han chocado un marciano y el disparo
+                        UnSoloDisparo = false;
                         Explosion e = new Explosion();
                         e.posX = listaMarcianos[i][j].posX;
                         e.posY = listaMarcianos[i][j].posY;
@@ -307,29 +333,37 @@ public class VentanaJuego extends javax.swing.JFrame {
                         e.sonidoExplosion.start();
                         listaMarcianos[i][j].posY = 2000;
                         listaDisparos.remove(k);
-                         puntuacion = puntuacion + 50;
-                label1.setText("" + puntuacion);
-               
-                    } 
-                    
-                   /** miNave.setFrame(miNave.posX,
-                                       miNave.posY, 
-                                       miNave.imagenNave.getWidth(null),
-                                      miNave.imagenNave.getHeight(null));
-           if(miNave.intersects(rectanguloMarciano)){
-               gameOver = true;
+                        puntuacion = puntuacion + 50;
+                        label1.setText("" + puntuacion);
                     }
-                */}
+                }
             }
         }
     }
 
+    private void colisionNaveMarciano() {
+        Rectangle2D.Double rectanguloMarciano = new Rectangle2D.Double();
+        Rectangle2D.Double rectanguloNave = new Rectangle2D.Double();
+        rectanguloNave.setFrame(miNave.posX,
+                miNave.posY,
+                miNave.imagenNave.getWidth(null),
+                miNave.imagenNave.getHeight(null));
+        for (int i = 0; i < filasMarcianos; i++) {
+            for (int j = 0; j < columnasMarcianos; j++) {
+                //calculo el rectángulo corresponmdiente al marciano que estoy comprobando
+                rectanguloMarciano.setFrame(listaMarcianos[i][j].posX,
+                        listaMarcianos[i][j].posY,
+                        listaMarcianos[i][j].imagen1.getWidth(null),
+                        listaMarcianos[i][j].imagen1.getHeight(null));
 
-    
-    
-    
-    
-    
+                //si entra aqui es xk el marciano ha interactuado con la nave
+                if (rectanguloMarciano.intersects(rectanguloNave)) {
+                    gameOver = true;
+                }
+            }
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -393,7 +427,7 @@ public class VentanaJuego extends javax.swing.JFrame {
                 miNave.setPulsadoDerecha(true);
                 break;
             case KeyEvent.VK_SPACE:
-                Disparo d = new Disparo();
+                Disparo d = new Disparo(puntuacion);
                 d.posicionaDisparo(miNave);
                 //agregamos el disparo a la lista de disparos
                 listaDisparos.add(d);

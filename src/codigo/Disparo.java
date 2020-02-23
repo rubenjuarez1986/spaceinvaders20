@@ -16,10 +16,14 @@ public class Disparo {
     
 
     
-    public Disparo(){
+    public Disparo(int puntuacion){
             try{
+               if(puntuacion<600){
                 imagen=ImageIO.read(getClass().getResource("/imagenes/disparo.png"));
-                
+               }else{
+                   
+                   imagen=ImageIO.read(getClass().getResource("/imagenes/nixon.png"));
+               }
             }
             catch(Exception e){
            
