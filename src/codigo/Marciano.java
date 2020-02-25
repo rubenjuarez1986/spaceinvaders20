@@ -19,7 +19,7 @@ public class Marciano {
 
     public int posX = 0;
     public int posY = 0;
-
+    public int velocidad=1; 
     private int anchoPantalla;
 
     public int vida = 100;
@@ -31,9 +31,9 @@ public class Marciano {
     //método para mover a la nave 
     public void mueve(boolean direccion) {
         if (direccion) {
-            posX=posX+3;
+            posX++;
         } else {
-            posX = posX-3;
+            posX-=velocidad;
         }
     }
 }
