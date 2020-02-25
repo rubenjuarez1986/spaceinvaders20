@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 /**
  *
- * @author Angel Esquinas
+ * @author Rocio Soriano
  */
 public class Marciano {
 
@@ -22,7 +22,7 @@ public class Marciano {
 
     private int anchoPantalla;
 
-    public int vida = 50;
+    public int vida = 100;
 
     public Marciano(int _anchoPantalla) {
         anchoPantalla = _anchoPantalla;

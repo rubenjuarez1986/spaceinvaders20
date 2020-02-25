@@ -39,6 +39,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     int puntuacion = 0;
 
     boolean gameOver = false;
+    //para que no se cuelgue si le doy a varios marcianos a ka vez con nixon
     boolean UnSoloDisparo = false;
     boolean FinDeJuego = false;
 

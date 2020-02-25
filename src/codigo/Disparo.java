@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 /**
  *
- * @author Jorge Cisneros
+ * @author Rocio Soriano
  */
 public class Disparo {
     Image imagen = null;
@@ -21,7 +21,7 @@ public class Disparo {
                if(puntuacion<600){
                 imagen=ImageIO.read(getClass().getResource("/imagenes/disparo.png"));
                }else{
-                   
+                   //disparo bonus
                    imagen=ImageIO.read(getClass().getResource("/imagenes/nixon.png"));
                }
             }
