@@ -5,7 +5,6 @@
  */
 package codigo;
 
-
 import java.awt.Color;
 import static java.awt.Color.green;
 import static java.awt.Color.white;
@@ -97,7 +96,6 @@ public class VentanaJuego extends javax.swing.JFrame {
         label2.setFont(font2);
         label2.setForeground(white);
         label2.setBackground(green);
-        label2.setBounds(300, 0, 600, 30);
         //puntuacion
         label1.setFont(font1);
         label1.setForeground(white);
@@ -250,7 +248,6 @@ public class VentanaJuego extends javax.swing.JFrame {
             g4.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
             g4.drawImage(fondo, 0, 0, null);
             /*buffer.getGraphics().drawImage(gameOver, 0, 0, ANCHOPANTALLA, ALTOPANTALLA, null);*/
-           
 
         } catch (IOException ex) {
         }
@@ -271,7 +268,6 @@ public class VentanaJuego extends javax.swing.JFrame {
             g3.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
             g3.drawImage(fondo, 0, 0, null);
             /*buffer.getGraphics().drawImage(gameOver, 0, 0, ANCHOPANTALLA, ALTOPANTALLA, null);*/
-           
 
         } catch (IOException ex) {
         }
@@ -404,7 +400,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
