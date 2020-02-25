@@ -92,14 +92,11 @@ public class VentanaJuego extends javax.swing.JFrame {
         Font font2 = null;
         font1 = new Font("Courier New", Font.BOLD, 30);
         font2 = new Font("Calibri", Font.BOLD, 30);
-        //titulo
-        label2.setFont(font2);
-        label2.setForeground(white);
-        label2.setBackground(green);
         //puntuacion
         label1.setFont(font1);
         label1.setForeground(white);
-        label1.setBackground(green);
+        Color blue = null;
+        label1.setBackground(blue);
         label1.setBounds(700, 0, 100, 30);
         label1.setText("     0");
         jPanel1.add(label1);
