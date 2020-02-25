@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 /**
  *
- * @author Rocio Soriano
+ * @author Ruben juarez
  */
 public class Disparo {
     Image imagen = null;

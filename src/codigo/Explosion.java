@@ -16,7 +16,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  *
- * @author Rocio Soriano
+ * @author Ruben juarez
  */
 public class Explosion {
     Image imagen1 =null;

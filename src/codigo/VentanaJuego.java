@@ -26,7 +26,7 @@ import javax.swing.Timer;
 
 /**
  *
- * @author Rocio Soriano
+ * @author Ruben Juarez
  */
 public class VentanaJuego extends javax.swing.JFrame {
 
@@ -97,7 +97,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         label1.setForeground(white);
         Color blue = null;
         label1.setBackground(blue);
-        label1.setBounds(700, 0, 100, 30);
+        label1.setBounds(700, 513, 100, 30);
         label1.setText("     0");
         jPanel1.add(label1);
         jPanel1.add(label2);
