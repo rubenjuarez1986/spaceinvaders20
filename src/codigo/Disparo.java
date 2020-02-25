@@ -22,7 +22,7 @@ public class Disparo {
                 imagen=ImageIO.read(getClass().getResource("/imagenes/disparo.png"));
                }else{
                    //disparo bonus
-                   imagen=ImageIO.read(getClass().getResource("/imagenes/nixon.png"));
+                   imagen=ImageIO.read(getClass().getResource("/imagenes/naranja.png"));
                }
             }
             catch(Exception e){

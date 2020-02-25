@@ -43,14 +43,14 @@ public class VentanaJuego extends javax.swing.JFrame {
     boolean UnSoloDisparo = false;
     boolean FinDeJuego = false;
 
-    static int ANCHOPANTALLA = 1000;
-    static int ALTOPANTALLA = 536;
+    static int ANCHOPANTALLA = 800;
+    static int ALTOPANTALLA = 600;
 
     int filasMarcianos = 6;
     int columnasMarcianos = 10;
     int contador = 0;
     //Reproduce el sonido una única vez.
-    boolean gilipollas = true;
+    boolean acierto = true;
     BufferedImage buffer = null;
 
     //buffer para guardar las imágenes de todos los marcianos
@@ -94,7 +94,6 @@ public class VentanaJuego extends javax.swing.JFrame {
         font1 = new Font("Courier New", Font.BOLD, 30);
         font2 = new Font("Calibri", Font.BOLD, 30);
         //titulo
-        label2.setText("Muerte a los humanos!!!");
         label2.setFont(font2);
         label2.setForeground(white);
         label2.setBackground(green);
@@ -251,10 +250,7 @@ public class VentanaJuego extends javax.swing.JFrame {
             g4.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
             g4.drawImage(fondo, 0, 0, null);
             /*buffer.getGraphics().drawImage(gameOver, 0, 0, ANCHOPANTALLA, ALTOPANTALLA, null);*/
-            if (gilipollas) {
-                reproduce("/sonidos/winner.wav");
-                gilipollas = false;
-            }
+           
 
         } catch (IOException ex) {
         }
@@ -275,10 +271,7 @@ public class VentanaJuego extends javax.swing.JFrame {
             g3.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
             g3.drawImage(fondo, 0, 0, null);
             /*buffer.getGraphics().drawImage(gameOver, 0, 0, ANCHOPANTALLA, ALTOPANTALLA, null);*/
-            if (gilipollas) {
-                reproduce("/sonidos/fin.wav");
-                gilipollas = false;
-            }
+           
 
         } catch (IOException ex) {
         }
