@@ -240,7 +240,7 @@ public class VentanaJuego extends javax.swing.JFrame {
 
     private void Fin(Graphics2D g4) {
         try {
-            fondo = ImageIO.read(getClass().getResource("/imagenes/winner.jpg"));
+            fondo = ImageIO.read(getClass().getResource("/imagenes/victoria.jpg"));
             g4.setColor(Color.BLACK);//doy el color negro a la pantalla
             g4.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
             g4.drawImage(fondo, 0, 0, null);
@@ -260,7 +260,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         }
 
         try {
-            fondo = ImageIO.read(getClass().getResource("/imagenes/gameover.jpg"));
+            fondo = ImageIO.read(getClass().getResource("/imagenes/derrota.jpg"));
             g3.setColor(Color.BLACK);//doy el color negro a la pantalla
             g3.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
             g3.drawImage(fondo, 0, 0, null);
